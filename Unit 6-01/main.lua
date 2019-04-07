@@ -7,48 +7,60 @@
 --
 -----------------------------------------------------------------------------------------
 
---backround colour and title
---------------
-display.setDefault( "background", 125/255, 0/255, 200/255 )
-local myText = display.newText( "Guess The \n Number!", 160, 30, native.systemFont, 45 )
-myText:setFillColor( 255/255, 100/255, 0 )
---------------
+
+-- Background colour
+----------------
+display.setDefault( "background", 255/255, 0/255, 132/255 )
+---------------
+
+-- Tile and dice image
+-----------------
+local title = display.newImageRect( "assets/title.png", 300, 500 )
+title.x = 160
+title.y = 210
+
+local image = display.newImageRect( "assets/dice.png", 130, 130 )
+image.x = 160
+image.y = 130
+------------------
 
 -- Calculate button and text field
--------------
-local calculateButton = display.newImageRect( "./assets/button.png", 300, 90 )
+---------------
+local calculateButton = display.newImageRect( "assets/button.PNG", 200, 75 )
 calculateButton.x = display.contentCenterX
-calculateButton.y = display.contentCenterY - 80
-calculateButton.id = " calculateButton "
- 
-local answerTextField = native.newTextField( display.contentCenterX, display.contentCenterY + 200, 300, 60 )
-answerTextField.id = "answer textField"
---------------
+calculateButton.y = display.contentCenterY + 130
+calculateButton.id = "calculate button"
 
---randomseed
-math.randomseed( os.time() )
-----------
+answerAsNumberField = native.newTextField( display.contentCenterX, display.contentCenterY + 230, 225, 40 )
+answerAsNumberField.id = "Answer textField"
+-----------------
 
--- Functions
-local numberToGuess = math.random( 1, 2 )
-local answerAsNumber = tonumber( answerTextField.text )
---------
+-- Text telling user to pick a number between 1 and 6
+--------------------
+responseText = display.newText( "  Pick a number \nbetween 1 and 6", display.contentCenterX, display.contentCenterY - 5, native.systemFont, 35 )
+responseText:setFillColor( 255/255, 255/255, 255/255 )
+--------------------
 
--- Text telling person to choose a number
-----------
-local myText = display.newText( "  Pick a number \nbetween 1 and 6", 160, display.contentCenterY + 40, native.systemFont, 40 )
-myText:setFillColor( 255/255, 100/255, 0 )
-----------
+-- Calculater button touch event
+local function calculateButtonTouch( event )
 
+math.randomseed( os.time() ) -- Randomseed
 
-local function calculateButtontouch ( event)
+-- Variables for the number to guess and the number that the user has entered
+------------
+local numberToGuess = math.random( 1, 6 )
+local answerAsNumber = tonumber(answerAsNumberField.text)
+-------------
 
-	if numberToGuess == answerAsNumber then
-local myText = display.newText( "Correct", 160, display.contentCenterY + 40, native.systemFont, 40 )
-	else
-		local myText = display.newText( "                Wrong! \n The correct answer is: "..  numberToGuess, display.contentCenterX, display.contentCenterY - 50, native.systemFont, 25 ) 
-	end
-	print( "Please play again!" )
+-- If statement for if the user's answer is equal to the number to guess
+if numberToGuess == answerAsNumber then
+    responseText.text = "Correct"
+else 
+	responseText.text = "Wrong!"
+    local myText = display.newText( "The correct answer was " .. numberToGuess, display.contentCenterX, display.contentCenterY + 45, native.systemFont, 27)
+
 end
 
-calculateButton :addEventListener( "touch", calculateButtontouch )
+end
+
+calculateButton:addEventListener( "touch", calculateButtonTouch )
